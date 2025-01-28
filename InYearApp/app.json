@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "InYearApp",
+    "slug": "InYearApp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/walking-shoe.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/walking-shoe.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.inyearapp.ios"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/walking-shoe.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.inyearapp.android"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/walking-shoe.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/walking-shoe.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
