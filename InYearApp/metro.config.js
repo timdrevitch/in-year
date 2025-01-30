@@ -9,3 +9,5 @@ config.resolver.alias = {
 };
 
 module.exports = config;
+
+// Server Script: npx react-native start

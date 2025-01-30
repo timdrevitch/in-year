@@ -1539,6 +1539,8 @@ PODS:
     - React-utils (= 0.76.6)
   - RNAppleHealthKit (1.7.0):
     - React
+  - RNCPicker (2.11.0):
+    - React-Core
   - RNGestureHandler (2.20.2):
     - DoubleConversion
     - glog
@@ -1753,6 +1755,7 @@ DEPENDENCIES:
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNAppleHealthKit (from `../node_modules/react-native-health`)
+  - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -1919,6 +1922,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNAppleHealthKit:
     :path: "../node_modules/react-native-health"
+  RNCPicker:
+    :path: "../node_modules/@react-native-picker/picker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -2007,6 +2012,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 7ce28d75c1b6effc22a4697983132b4dcc5843b7
   ReactCommon: b378aa71b395667190c0bf95c14e961793eb676f
   RNAppleHealthKit: 60a6beefdd89a75811e9a8873a5e24f351dee681
+  RNCPicker: 4f6d5e8d107064be32dfc8f1bcb5a3741135db0b
   RNGestureHandler: 82f59e40580e0c2f8262552c149716511131b412
   RNReanimated: be8ab59054b1994a127623ebb6350a7c5cc4d5e8
   RNScreens: 6ba8e720d9c6a969dcf4aa09b9e8688a273635cb

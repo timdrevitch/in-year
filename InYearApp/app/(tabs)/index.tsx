@@ -1,18 +1,24 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Text, View, useThemeColor } from "../../components/Themed";
 import Value from "../../components/Value";
-import { ScrollView, StyleSheet, RefreshControl } from "react-native";
+import { ScrollView, StyleSheet, RefreshControl, TouchableOpacity } from "react-native";
 import useHealthData from "../../hooks/useFetchStepsData";
+import useYearlyHealthData from "../../hooks/useFetchYearlyStepsData";
+import { Picker } from "@react-native-picker/picker";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 
 type HomeScreenProps = {};
 
 const HomeScreen: React.FC<HomeScreenProps> = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [inYear, setInYear] = useState<number>(2025);
   const [stepChange, setStepChange] = useState<number | null>(null);
   const [distanceChange, setDistanceChange] = useState<number | null>(null);
   const previousSteps = useRef<number>(0);
   const previousDistance = useRef<number>(0);
+  const [selectedYear, setSelectedYear] = useState(inYear);
 
   const yesterday: Date = new Date();
   yesterday.setDate(date.getDate() - 1);
@@ -25,12 +31,15 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
     heartRate: heartRateYesterday,
   } = useHealthData(yesterday);
   const { steps, flights, distance, calories, heartRate } = useHealthData(date);
+  const { yearlySteps, yearlyFlights, yearlyDistance, yearlyCalories, yearlyHeartRate } = useYearlyHealthData(inYear);
 
   // Use the theme colors for text and background
   const backgroundColor = useThemeColor({}, "background");
   const cardBackgroundColor = useThemeColor({}, "cardBackground");
-  const textColor = useThemeColor({}, "text");
+  const textColor = useThemeColor({}, "darkerText");
   const titleColor = useThemeColor({}, "text");
+  const changeText = useThemeColor({}, "greenText");
+  const interactionText = useThemeColor({}, "blueText");
 
   const onRefresh = useCallback(() => {
     setIsRefreshing(true);
@@ -60,7 +69,7 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
     setTimeout(() => {
       setIsRefreshing(false); // Stop refreshing
     }, 1500);
-  }, [steps, distance]);
+  }, [steps, yearlySteps, distance]);
 
   useEffect(() => {
     // Whenever the date is updated (e.g. from pull-to-refresh)
@@ -87,6 +96,12 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
     }
   }, [distance]);
 
+  const handleYearChange = (year: number) => {
+    setSelectedYear(year);
+    setInYear(year); // Update the parent component's state if necessary
+  };
+
+
   return (
     <ScrollView
       id="home-page"
@@ -100,38 +115,90 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
       }
     >
       <View style={styles.group}>
-        <Text style={[styles.title, { color: titleColor }]}>Today</Text>
+        <Text style={[styles.title, { color: titleColor }]}>In {inYear} ...</Text>
+        {/* <Picker
+          selectedValue={selectedYear}
+          style={{ backgroundColor: cardBackgroundColor, color: titleColor }}
+          onValueChange={handleYearChange}
+        >
+          <Picker.Item label="2023" value={2023} />
+          <Picker.Item label="2024" value={2024} />
+          <Picker.Item label="2025" value={2025} />
+        </Picker> */}
         <View style={[styles.card, { backgroundColor: cardBackgroundColor }]}>
+          <View style={[styles.subTitleContainer, { backgroundColor: cardBackgroundColor }]}>
+            <Text style={[styles.subTitle, { color: titleColor }]}>Fitness</Text>
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="ellipsis-horizontal-circle-sharp" size={30} color={textColor} />
+            </TouchableOpacity>
+          </View>
           <Value
             label="Steps:"
-            value={steps.toString()}
-            change={stepChange ? stepChange.toString() : null}
+            ionicon="footsteps"
+            value={yearlySteps.toLocaleString()}
+            change={steps.toLocaleString() + " today"}
           />
           <Value
             label="Distance:"
+            fontAwesome6Icon="person-walking-luggage"
+            value={`${(yearlyDistance / 1000).toFixed(2)} km`}
+            change={(distance / 1000).toFixed(2) + " km today"}
+          />
+          {/* <Value label="Floors Climbed:" value={yearlyFlights.toString()} />
+          <Value label="Active Calories Burned:" value={yearlyCalories.toString()} />
+          <Value label="Average Heart Rate:" value={yearlyHeartRate.toString()} /> */}
+        </View>
+      </View>
+      <View style={styles.group}>
+        <Text style={[styles.title, { color: titleColor }]}>Today</Text>
+        <View style={[styles.card, { backgroundColor: cardBackgroundColor }]}>
+          <View style={[styles.subTitleContainer, { backgroundColor: cardBackgroundColor }]}>
+            <Text style={[styles.subTitle, { color: titleColor }]}>Fitness</Text>
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="ellipsis-horizontal-circle-sharp" size={30} color={textColor} />
+            </TouchableOpacity>
+          </View>
+          <Value
+            label="Steps:"
+            ionicon="footsteps"
+            value={steps.toLocaleString()}
+            change={stepChange ? stepChange.toLocaleString() : null}
+          />
+          <Value
+            label="Distance:"
+            fontAwesome6Icon="person-walking-luggage"
             value={`${(distance / 1000).toFixed(2)} km`}
             change={distanceChange ? (distanceChange / 1000).toFixed(2) : null}
           />
-          <Value label="Floors Climbed:" value={flights.toString()} />
-          <Value label="Active Calories Burned:" value={calories.toString()} />
-          <Value label="Average Heart Rate:" value={heartRate.toString()} />
+          <Value label="Floors Climbed:" fontAwesome6Icon="stairs" value={flights.toString()} />
+          <Value label="Active Calories Burned:" fontAwesome5Icon="fire-alt" value={calories.toString()} />
+          <Value label="Average Heart Rate:" fontAwesome5Icon="heartbeat" value={heartRate.toString()} />
         </View>
       </View>
       <View style={styles.group}>
         <Text style={[styles.title, { color: titleColor }]}>Yesterday</Text>
         <View style={[styles.card, { backgroundColor: cardBackgroundColor }]}>
-          <Value label="Steps:" value={stepsYesterday.toString()} />
+          <View style={[styles.subTitleContainer, { backgroundColor: cardBackgroundColor }]}>
+            <Text style={[styles.subTitle, { color: titleColor }]}>Fitness</Text>
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="ellipsis-horizontal-circle-sharp" size={30} color={textColor} />
+            </TouchableOpacity>
+          </View>
+          <Value label="Steps:" ionicon="footsteps" value={stepsYesterday.toString()} />
           <Value
             label="Distance:"
+            fontAwesome6Icon="person-walking-luggage"
             value={`${(distanceYesterday / 1000).toFixed(2)} km`}
           />
-          <Value label="Floors Climbed:" value={flightsYesterday.toString()} />
+          <Value label="Floors Climbed:" fontAwesome6Icon="stairs" value={flightsYesterday.toString()} />
           <Value
             label="Active Calories Burned:"
+            fontAwesome5Icon="fire-alt"
             value={caloriesYesterday.toString()}
           />
           <Value
             label="Average Heart Rate:"
+            fontAwesome5Icon="heartbeat"
             value={heartRateYesterday.toString()}
           />
         </View>
@@ -152,7 +219,18 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 30,
+  },
+  subTitleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 15,
+    marginTop: -5,
+  },
+  subTitle: {
+    fontWeight: "bold",
+    fontSize: 30,
   },
   card: {
     borderRadius: 10, // Rounded corners for the card
@@ -163,7 +241,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1, // Transparency of the shadow
     shadowRadius: 4, // Blur of the shadow
     elevation: 5, // Shadow for Android (elevation)
-    borderWidth: 1, // Border width for the card
+    borderWidth: 2, // Border width for the card
     borderColor: "gray", // Border color for the card
   },
   values: {
@@ -171,6 +249,12 @@ const styles = StyleSheet.create({
     gap: 25,
     flexWrap: "wrap",
     marginTop: 20, // Adjusted margin between items in the card
+  },
+  picker: {
+    height: 50,
+    width: 150,
+    backgroundColor: '#333',
+    color: '#fff',
   },
   datePicker: {
     alignItems: "center",
@@ -187,6 +271,12 @@ const styles = StyleSheet.create({
     color: "green",
     fontSize: 16,
     marginLeft: 10,
+  },
+  iconButton: {
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

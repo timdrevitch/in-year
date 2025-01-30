@@ -35,12 +35,26 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          headerLeft: () => (
+            <Link href="/modal" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="user-circle"
+                    size={25}
+                    color={Colors[colorScheme ?? "light"].text}
+                    style={{ marginLeft: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </Link>
+          ),
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
-                    name="info-circle"
+                    name="bars"
                     size={25}
                     color={Colors[colorScheme ?? "light"].text}
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
@@ -52,7 +66,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="tabTwo"
+        name="feed"
         options={{
           title: "Feed",
           tabBarIcon: ({ color }) => <TabBarIcon name="feed" color={color} />,
@@ -61,17 +75,24 @@ export default function TabLayout() {
       <Tabs.Screen
         name="tabThree"
         options={{
-          title: "Store",
+          title: "Friends",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="shopping-cart" color={color} />
+            <TabBarIcon name="users" color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="tabFour"
         options={{
-          title: "Friends",
-          tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
+          title: "Settings",
+          tabBarIcon: ({ color }) => <TabBarIcon name="gear" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="tabFive"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color }) => <TabBarIcon name="gear" color={color} />,
         }}
       />
     </Tabs>

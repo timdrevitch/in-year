@@ -1,15 +1,13 @@
-// import EditScreenInfo from "@/components/EditScreenInfo";
-// import { Text, View } from "@/components/Themed";
 import { Text, View } from "../../components/Themed";
-import "./tabTwo.scss";
+import "./feed.scss";
 import EditScreenInfo from "../../components/EditScreenInfo";
 
-type TabTwoScreenProps = {};
+type FeedScreenProps = {};
 
-const TabTwoScreen: React.FC<TabTwoScreenProps> = () => {
+const FeedScreen: React.FC<FeedScreenProps> = () => {
   return (
     <View id="tab-two-page" className="container">
-      <Text className="title">Tab Two</Text>
+      <Text className="title">Feed</Text>
       <View
         className="separator"
         lightColor="#eee"
@@ -20,4 +18,4 @@ const TabTwoScreen: React.FC<TabTwoScreenProps> = () => {
   );
 };
 
-export default TabTwoScreen;
+export default FeedScreen;
