@@ -1539,6 +1539,8 @@ PODS:
     - React-utils (= 0.76.6)
   - RNAppleHealthKit (1.7.0):
     - React
+  - RNCAsyncStorage (2.1.0):
+    - React-Core
   - RNCPicker (2.11.0):
     - React-Core
   - RNGestureHandler (2.20.2):
@@ -1755,6 +1757,7 @@ DEPENDENCIES:
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNAppleHealthKit (from `../node_modules/react-native-health`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1922,6 +1925,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNAppleHealthKit:
     :path: "../node_modules/react-native-health"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
   RNGestureHandler:
@@ -2012,6 +2017,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 7ce28d75c1b6effc22a4697983132b4dcc5843b7
   ReactCommon: b378aa71b395667190c0bf95c14e961793eb676f
   RNAppleHealthKit: 60a6beefdd89a75811e9a8873a5e24f351dee681
+  RNCAsyncStorage: cc6479c4acd84cc7004946946c8afe30b018184d
   RNCPicker: 4f6d5e8d107064be32dfc8f1bcb5a3741135db0b
   RNGestureHandler: 82f59e40580e0c2f8262552c149716511131b412
   RNReanimated: be8ab59054b1994a127623ebb6350a7c5cc4d5e8

@@ -1,10 +1,11 @@
 import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
-import { Pressable } from "react-native";
+import { Image, Pressable } from "react-native";
 import { useColorScheme } from "../../components/useColorScheme";
 import Colors from "../../constants/Colors";
 import { useClientOnlyValue } from "../../components/useClientOnlyValue";
+import { useCustomColorScheme } from "../../components/useCustomColorScheme";
 
 // import Colors from "@/constants/Colors";
 // import { useColorScheme } from "@/components/useColorScheme";
@@ -20,11 +21,12 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const {theme} = useCustomColorScheme();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? "dark"].tint,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
@@ -36,21 +38,25 @@ export default function TabLayout() {
           title: "Home",
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerLeft: () => (
-            <Link href="/modal" asChild>
+            <Link href="../profileModal" asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <FontAwesome
-                    name="user-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginLeft: 15, opacity: pressed ? 0.5 : 1 }}
+                  <Image
+                    source={require("../../assets/images/shrekBurglar.png")}
+                    style={{
+                      width: 35, 
+                      height: 35, 
+                      borderRadius: 17.5,
+                      marginLeft: 15,
+                      opacity: pressed ? 0.5 : 1, 
+                    }}
                   />
                 )}
               </Pressable>
             </Link>
           ),
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href="../menuModal" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome

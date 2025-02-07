@@ -14,10 +14,11 @@ type ValueProps = {
   fontAwesome6Icon?: React.ComponentProps<typeof FontAwesome6>["name"];
   ionicon?: React.ComponentProps<typeof Ionicons>["name"];
   value: string;
+  changeColor?: string | null;
   change?: string | null;
 };
 
-const Value = ({ label, fontAwesomeIcon, fontAwesome5Icon, fontAwesome6Icon, ionicon, value, change }: ValueProps) => {
+const Value = ({ label, fontAwesomeIcon, fontAwesome5Icon, fontAwesome6Icon, ionicon, value, change, changeColor }: ValueProps) => {
 
   // Use the theme colors for text and background
   const backgroundColor = useThemeColor({}, "background");
@@ -25,17 +26,18 @@ const Value = ({ label, fontAwesomeIcon, fontAwesome5Icon, fontAwesome6Icon, ion
   const textColor = useThemeColor({}, "darkerText");
   const titleColor = useThemeColor({}, "text");
   const changeText = useThemeColor({}, "greenText");
+  const redText = useThemeColor({}, "redText");
   const interactionText = useThemeColor({}, "blueText");
 
   return (
-    <View id="value-component" style={[{ backgroundColor: cardBackgroundColor }]}>
+    <View id="value-component" style={[styles.valueComponent, { backgroundColor: cardBackgroundColor }]}>
       <Text style={[styles.label, { color: textColor }]}>{label}</Text>
       <View style={[styles.valueContainer, { backgroundColor: cardBackgroundColor }]}>
         {fontAwesomeIcon && (
           <FontAwesome
             name={fontAwesomeIcon}
             size={25}
-            color={textColor}
+            color={interactionText}
             style={styles.icon}
           />
         )}
@@ -43,7 +45,7 @@ const Value = ({ label, fontAwesomeIcon, fontAwesome5Icon, fontAwesome6Icon, ion
           <FontAwesome5
             name={fontAwesome5Icon}
             size={25}
-            color={textColor}
+            color={interactionText}
             style={styles.icon}
           />
         )}
@@ -51,7 +53,7 @@ const Value = ({ label, fontAwesomeIcon, fontAwesome5Icon, fontAwesome6Icon, ion
           <FontAwesome6
             name={fontAwesome6Icon}
             size={25}
-            color={textColor}
+            color={interactionText}
             style={styles.icon}
           />
         )}
@@ -59,18 +61,21 @@ const Value = ({ label, fontAwesomeIcon, fontAwesome5Icon, fontAwesome6Icon, ion
           <Ionicons
             name={ionicon}
             size={25}
-            color={textColor}
+            color={interactionText}
             style={styles.icon}
           />
         )}
         <Text style={[styles.value, { color: titleColor }]}>{value}</Text>
-        {change && <Text style={[styles.changeText, { color: changeText }]}> +{change}</Text>}
+        {change && changeColor === "red" ? <Text style={[styles.changeText, { color: redText }]}>{change}</Text> : <Text style={[styles.changeText, { color: changeText }]}>{change}</Text>}
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  valueComponent : {
+    marginBottom: 3,
+  },
   label: {
     color: "white",
     fontSize: 12,

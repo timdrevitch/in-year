@@ -10,8 +10,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-
-// import { useColorScheme } from "@/components/useColorScheme";
+import { useCustomColorScheme } from "../components/useCustomColorScheme";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -51,13 +50,33 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const { theme } = useCustomColorScheme();
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        <Stack.Screen
+          name="(modals)/menuModal"
+          options={{
+            headerShown: true,
+            headerTitle: "Menu",
+            presentation: "card",
+            gestureDirection: "horizontal",
+            animation: "slide_from_right",
+          }}
+        />
+        <Stack.Screen
+          name="(modals)/profileModal"
+          options={{
+            headerShown: true,
+            headerTitle: "Profile",
+            presentation: "card",
+            gestureDirection: "horizontal",
+            animation: "slide_from_right",
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );

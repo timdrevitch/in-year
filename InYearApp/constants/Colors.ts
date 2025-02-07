@@ -6,12 +6,13 @@ export default {
   light: {
     text: "#000",
     darkerText: "#000",
-    background: "#fff",
+    background: "#dddddd",
     cardBackground: "#f7f7f7",
     tint: tintColorLight,
     tabIconDefault: "#ccc",
     tabIconSelected: "#2f95dc",
     greenText: "green",
+    redText: "red",
     blueText: blueColor
   },
   dark: {
@@ -23,6 +24,7 @@ export default {
     tabIconDefault: "#ccc",
     tabIconSelected: "#fff",
     greenText: "#AAFF00",
+    redText: "#FF5733",
     blueText: blueColor
   },
 };

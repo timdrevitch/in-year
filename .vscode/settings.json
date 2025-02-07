@@ -3,5 +3,8 @@
   "typescript.preferences.quoteStyle": "double",
   "javascript.format.semicolons": "insert",
   "typescript.format.semicolons": "insert",
-  "editor.indentSize": "tabSize"
+  "editor.tabSize": 2,
+  "editor.formatOnSaveMode": "file",
+  "editor.formatOnSave": true,
+  "diffEditor.codeLens": true
 }

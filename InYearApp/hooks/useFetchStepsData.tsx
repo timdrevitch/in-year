@@ -19,7 +19,9 @@ const permissions: HealthKitPermissions = {
       AppleHealthKit.Constants.Permissions.DistanceWalkingRunning,
       AppleHealthKit.Constants.Permissions.ActiveEnergyBurned,
       AppleHealthKit.Constants.Permissions.HeartRate,
-      // AppleHealthKit.Constants.Permissions.Workout,
+      AppleHealthKit.Constants.Permissions.SleepAnalysis,
+      AppleHealthKit.Constants.Permissions.Workout,
+      AppleHealthKit.Constants.Permissions.Weight,
     ],
     write: [],
   },
@@ -32,8 +34,10 @@ const useHealthData = (date: Date) => {
   const [steps, setSteps] = useState<number>(0);
   const [flights, setFlights] = useState<number>(0);
   const [distance, setDistance] = useState<number>(0);
-  const [calories, setCalories] = useState<number>(0); // Active Energy Burned
-  const [heartRate, setHeartRate] = useState<number>(0); // Average Heart Rate
+  const [weight, setWeight] = useState<number>(0);
+  const [calories, setCalories] = useState<number>(0);
+  const [heartRate, setHeartRate] = useState<number>(0);
+  const [sleepDuration, setSleepDuration] = useState<number>(0); 
   // const [workoutDuration, setWorkoutDuration] = useState(0); // Workout Duration in minutes
 
   // iOS - HealthKit
@@ -68,6 +72,13 @@ const useHealthData = (date: Date) => {
     const endOfDay = new Date(date); // The current moment (end of the day)
     endOfDay.setHours(23, 59, 59, 999); // Set to just before midnight of the next day
 
+    // For fetching sleep data
+    const startOfSleepWindow = new Date(date);
+    startOfSleepWindow.setDate(date.getDate() - 1); // Go back one day
+    startOfSleepWindow.setHours(12, 0, 0, 0); // Set to noon
+    const endOfSleepWindow = new Date(date);
+    endOfSleepWindow.setHours(12, 0, 0, 0); // Today at noon
+
     const options: HealthInputOptions = {
       date: date.toISOString(),
       includeManuallyAdded: false,
@@ -76,6 +87,46 @@ const useHealthData = (date: Date) => {
       ascending: false, // Fetch most recent first
       limit: 1000, // Limit to a reasonable number of records
     };
+
+    const startDateWeight = new Date(date);
+    startDateWeight.setHours(0, 0, 0, 0); // Start of the given date
+    const endDateWeight = new Date(startDateWeight.getTime() + 86400000); 
+    const weightOptions: HealthInputOptions = {
+      unit: AppleHealthKit.Constants.Units.pound,
+      startDate: startDateWeight.toISOString(),
+      endDate: endDateWeight.toISOString(),
+      includeManuallyAdded: true,
+      limit: 1, // Get the most recent entry for that day
+    };
+
+    const sleepOptions: HealthInputOptions = {
+      startDate: startOfSleepWindow.toISOString(),
+      endDate: endOfSleepWindow.toISOString(),
+      ascending: false, // Fetch most recent first
+      limit: 1000, // Limit to a reasonable number of records
+    };
+  
+    // Fetch sleep duration
+    AppleHealthKit.getSleepSamples(sleepOptions, (err, results) => {
+      if (err) {
+        console.error("Error fetching sleep data:", err);
+        return;
+      }
+  
+      if (results.length === 0) {
+        setSleepDuration(0);
+        return;
+      }
+  
+      // Sum sleep durations
+      const totalSleep = results.reduce((sum, entry) => {
+        const start = new Date(entry.startDate).getTime();
+        const end = new Date(entry.endDate).getTime();
+        return sum + (end - start);
+      }, 0);
+  
+      setSleepDuration((totalSleep / (1000 * 60 * 60))/2); // Convert to hours
+    });
 
     // Fetch Steps
     AppleHealthKit.getStepCount(options, (err, results) => {
@@ -90,6 +141,20 @@ const useHealthData = (date: Date) => {
     // Fetch Distance
     AppleHealthKit.getDistanceWalkingRunning(options, (err, results) => {
       if (!err) setDistance(results.value);
+    });
+
+    // Fetch Weight
+    AppleHealthKit.getWeightSamples(weightOptions, (err, results) => {
+      if (err) {
+        console.warn("Error fetching weight:", err);
+        return;
+      }
+  
+      if (results && results.length > 0) {
+        setWeight(results[0].value);
+      } else {
+        //console.warn(`No weight data found for ${date.toDateString()}.`);
+      }
     });
 
     // Fetch Active Energy Burned (Calories)
@@ -211,7 +276,9 @@ const useHealthData = (date: Date) => {
     flights,
     distance,
     calories,
+    weight,
     heartRate,
+    sleepDuration,
     // workoutDuration,
   };
 };

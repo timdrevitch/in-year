@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "gov.fema.mobile.ios.FEMA"
+      "bundleIdentifier": "com.td.mobile.ios.inyearapp"
     },
     "android": {
       "adaptiveIcon": {
